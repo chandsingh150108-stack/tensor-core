@@ -1,10 +1,14 @@
 # Personal CRM — Setup
 
-## For building with Claude Code, Codex, Cursor or Antigravity
+## For building the project with Claude Code
 
-1. Start your favorite Coding Agent like `claude` in a Terminal
-2. Install the relevant Plugins, Skills and MCP Servers
-3. Ask your Coding Agent: "Please build the entire project; don't stop until success criteria are met and the product is running"
+1. Install Claude Code and login as described [here](https://code.claude.com/docs/en/quickstart#step-1-install-claude-code)
+2. Start Claude with `claude --permission-mode auto`
+3. Enter: `Build the entire project; only stop when success criteria are met and the product is running`
+
+## For building with Codex, Cursor or Antigravity
+
+1. Exactly the same instructions, but substitute your favorite Coding Agent!
 
 ## For building with Pi and Open-Source models
 

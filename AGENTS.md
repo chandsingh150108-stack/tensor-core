@@ -20,7 +20,8 @@ realistic sample data, so every screen looks alive immediately.
 
 - **Dashboard** (the landing page) — an at-a-glance view of how sales are going: a chart of deals won
   per month, revenue won per month, a feed of recent activity, and a list of upcoming and overdue
-  follow-ups.
+  follow-ups. The dashboard should also include a way to visualilze pipeline including expected revenue
+  based on probability of close
 - **Organizations** — the companies you do business with. A searchable table to add, edit and remove
   organizations. Click one to see its details, including its contacts and deals.
 - **Contacts** — the people you deal with. A searchable table you can also filter by status (lead,
@@ -44,7 +45,7 @@ Four kinds of record. (Plain-English fields — the exact details are up to the 
 - **Contact** — a person you deal with. Key info: name, email, phone, job title, the organization
   they belong to, and a status (lead, qualified, or customer).
 - **Deal** — a potential sale. Key info: a name, the organization and the main contact it's with, its
-  stage in the pipeline, its value in US dollars, and its expected or actual close date.
+  stage in the pipeline, its value in US dollars, probability of close, and its expected or actual close date.
 - **Activity** — something that happened, or needs to happen, with a contact or deal. Key info: type
   (note, call or email), the contact and/or deal it relates to, a description, when it happened, and
   optionally a due date and whether it's done (so the same record doubles as a follow-up task).
@@ -61,6 +62,8 @@ Just enough direction to keep things on track — specific choices are left to t
   and the drag-and-drop pipeline. Don't hand-roll what a mature library does well.
 - Keep the implementation simple and conventional. Library, data and structure choices are the
   Coding Agent's call, as long as the requirements and the success criteria below are met.
+- The app will be running in a VS Code dev container with ports mapped on the host computer; ensure
+  the server is configured so that it can be viewed in a browser on the host computer.
 
 ## Not in scope (v1)
 
@@ -85,6 +88,8 @@ Applies to the whole app:
 - **Avoid** these — they read as generic "AI-generated" tells: background gradients, purple
   backgrounds, buttons with gradients, and panels or cards with a single accent border line down one
   side.
+- Include visual / icon elements for main nav items, for edit and delete actions on table rows, and
+  where it makes sense, but avoid unnecessary emojis
 
 ## Phases and success criteria
 
@@ -148,8 +153,9 @@ working, not just assert.
 2. Each deal displays its stage, value in US dollars, close date, organization and primary contact.
 3. The Pipeline shows one column per stage, with each deal as a card in the correct column.
 4. Dragging a deal card to another column changes its stage, and the change persists after a refresh
-   and matches the Deals table.
-5. The unit tests for changing stage (including Won and Lost) all pass.
+   and matches the Deals table. The total and expected revenue in each column refreshes automatically.
+5. The pipeline shows fully where possible, filling horizontal space, only showing scrollbars when needed.
+6. The unit tests for changing stage (including Won and Lost) all pass.
 
 ### Phase 4 — Activities and tasks
 
@@ -175,13 +181,14 @@ working, not just assert.
 - The Dashboard as the landing page.
 - A chart of deals won per month.
 - Revenue (sum of won deal values) per month.
+- Charts or visualizations showing pipeline including expected revenue
 - A feed of recent activity across all records.
 - A list of upcoming and overdue tasks.
 
 **Success criteria**
 
 1. The Dashboard is the landing page and shows: deals won per month, revenue won per month, a
-   recent-activity feed, and a list of upcoming and overdue tasks.
+   recent-activity feed, and a list of upcoming and overdue tasks, along with pipeline visualizations
 2. The figures shown match the underlying data (e.g. the count of won deals in a month equals what's
    in the data).
 3. After marking a deal Won, or adding an activity or due-dated task, the dashboard reflects the
@@ -217,6 +224,8 @@ The project is complete, and the Coding Agent may stop, when **all** of the foll
 - Activities and tasks work, and the dashboard accurately reflects the data.
 - The app ships with realistic sample data, so it looks alive on first launch.
 - The look-and-feel rules are met and none of the banned elements appear anywhere.
+- The dashboard looks stunning: compelling information, well presented.
+- The drag and drop on the pipeline works well, stage numbers update, scrollbars don't show unless necessary.
 - All unit tests pass.
 - **Most importantly: the product has been validated by actually using it end to end in a real
   browser — clicking through every section as a real user would, performing the actions above, and
