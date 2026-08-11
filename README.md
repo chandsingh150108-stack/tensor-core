@@ -18,7 +18,7 @@ Wait until the build completes
 
 1. In the Terminal, enter "opencode"  
 2. Run the command `/connect` and follow the instructions to connect to OpenCode Zen, pasting in your API key.  
-3. Run the command `models` and pick `DeepSeek V4 Flash (Free)` or your model of choice
+3. Run the command `/models` and pick `DeepSeek V4 Flash Free` or your model of choice
 
 ### Go!
 
