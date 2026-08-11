@@ -64,7 +64,7 @@ Just enough direction to keep things on track — specific choices are left to t
   Coding Agent's call, as long as the requirements and the success criteria below are met.
 - The app will be running in a VS Code dev container with ports mapped on the host computer; ensure
   the server is configured so that it can be viewed in a browser on the host computer.
-- Use any ports from 4200-4299
+- Use any ports from 4900-4999
 
 ## Not in scope (v1)
 
