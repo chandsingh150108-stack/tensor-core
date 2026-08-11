@@ -1,18 +1,27 @@
 # Personal CRM — Setup
 
-## For building the project with Claude Code
+## For building from free with OpenCode Zen
 
-1. Install Claude Code and login as described [here](https://code.claude.com/docs/en/quickstart#step-1-install-claude-code)
-2. Start Claude with `claude --permission-mode auto`
-3. Enter: `Build the entire project; only stop when success criteria are met and the product is running`
+### Step 1: Setup your OpenCode Zen acccount
 
-## For building with Codex, Cursor or Antigravity
+Visit OpenCode Zen here: https://opencode.ai/zen
 
-1. Exactly the same instructions, but substitute your favorite Coding Agent!
+Sign up for a free account and create a free API key.
 
-## For building with Pi and Open-Source models
+### Step 2: Open this as a Dev Container
 
-Open a terminal and run:
-`git checkout pi`
+Ctrl+Shift+P (PC) or Cmd+Shift+P (Mac) then choose "Dev Containers: Reopen in Container"
 
-This README should be updated automatically; follow the new instructions
+Wait until the build completes
+
+### Step 3: Start OpenCode
+
+1. In the Terminal, enter "opencode"  
+2. Run the command `/connect` and follow the instructions to connect to OpenCode Zen, pasting in your API key.  
+3. Run the command `models` and pick `DeepSeek V4 Flash (Free)` or your model of choice
+
+### Go!
+
+In OpenCode, enter this!
+
+> Build the entire project, keep going until all success criteria are met
