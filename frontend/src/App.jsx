@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import './App.css';
 import Particles from './components/Particles';
 import HeroSection from './components/HeroSection';
+import InfoSection from './components/InfoSection';
 import StepIndicator from './components/StepIndicator';
 import ImageUploader from './components/ImageUploader';
 import ProcessingView from './components/ProcessingView';
@@ -128,6 +129,7 @@ function App() {
       <div className="app-container">
         <div className="main-content">
           <HeroSection />
+          <InfoSection />
           <StepIndicator currentStep={currentStep} />
 
           {status === 'idle' && (
