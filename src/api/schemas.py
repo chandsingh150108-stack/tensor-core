@@ -48,6 +48,7 @@ class ReportResponse(BaseModel):
     status: str
     metrics: Optional[dict] = None
     confidence: Optional[float] = None
+    feature_points: list = []
 
 
 class ErrorResponse(BaseModel):

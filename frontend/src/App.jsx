@@ -9,6 +9,8 @@ import ImageComparison from './components/ImageComparison';
 import ResultsDashboard from './components/ResultsDashboard';
 import { uploadImage, startRegistration, pollRegistration, getReport } from './api/client';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+
 function getStepFromStatus(status) {
   if (status === 'idle') return 1;
   if (status === 'submitting' || status === 'polling') return 2;
@@ -91,7 +93,7 @@ function App() {
           const reportResult = await getReport(jid);
           setReport(reportResult);
           if (result.status === 'done') {
-            setWarpedImage(`/report/${jid}/overlay`);
+            setWarpedImage(`${API_BASE}/report/${jid}/warped-image`);
           }
           return;
         }
@@ -158,7 +160,11 @@ function App() {
 
           {(status === 'done' || status === 'failed' || status === 'timeout') && (
             <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
-              <ResultsDashboard report={report} sourceImage={sourceImage} />
+              <ResultsDashboard
+                report={report}
+                sourceImage={sourceImage}
+                featurePoints={report?.feature_points || []}
+              />
 
               {sourceImage && (
                 <div style={{ marginTop: '32px' }}>

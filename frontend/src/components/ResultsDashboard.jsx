@@ -149,7 +149,7 @@ function MetricCard({ icon, label, value, unit, color, delay }) {
   );
 }
 
-function FeatureViz({ sourceImage }) {
+function FeatureViz({ sourceImage, featurePoints }) {
   const canvasRef = React.useRef(null);
 
   useEffect(() => {
@@ -164,30 +164,30 @@ function FeatureViz({ sourceImage }) {
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
 
-      const points = [];
-      for (let i = 0; i < 50; i++) {
-        points.push({
-          x: Math.random() * img.width,
-          y: Math.random() * img.height,
-          color: `hsl(${120 + Math.random() * 80}, 80%, 60%)`,
-        });
-      }
+      const points = featurePoints && featurePoints.length > 0
+        ? featurePoints.slice(0, 200)
+        : Array.from({ length: 50 }, () => ({
+            x: Math.random() * img.width,
+            y: Math.random() * img.height,
+          }));
 
       points.forEach((p, i) => {
         setTimeout(() => {
           ctx.beginPath();
           ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
-          ctx.fillStyle = p.color;
+          ctx.fillStyle = `hsl(${120 + (i * 137) % 80}, 80%, 60%)`;
           ctx.fill();
           ctx.strokeStyle = 'rgba(255,255,255,0.8)';
           ctx.lineWidth = 1;
           ctx.stroke();
-        }, i * 30);
+        }, i * 15);
       });
     };
-  }, [sourceImage]);
+  }, [sourceImage, featurePoints]);
 
   if (!sourceImage) return null;
+
+  const pointCount = featurePoints ? featurePoints.length : 50;
 
   return (
     <div style={{
@@ -212,7 +212,7 @@ function FeatureViz({ sourceImage }) {
         fontWeight: 600,
         color: 'var(--success)',
       }}>
-        50 feature points detected
+        {pointCount} feature points detected
       </div>
     </div>
   );
@@ -290,7 +290,7 @@ const styles = {
   },
 };
 
-export default function ResultsDashboard({ report, sourceImage }) {
+export default function ResultsDashboard({ report, sourceImage, featurePoints }) {
   if (!report) return null;
 
   const metrics = report.metrics || {};
@@ -348,7 +348,7 @@ export default function ResultsDashboard({ report, sourceImage }) {
 
       <div style={styles.featureSection}>
         <div style={styles.featureTitle}>Feature Detection</div>
-        <FeatureViz sourceImage={sourceImage} />
+        <FeatureViz sourceImage={sourceImage} featurePoints={featurePoints} />
       </div>
 
       <div style={styles.disclaimer}>
