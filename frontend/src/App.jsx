@@ -162,14 +162,14 @@ function App() {
             <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
               <ResultsDashboard
                 report={report}
-                sourceImage={sourceImage}
+                sourceImage={jobId ? `${API_BASE}/report/${jobId}/source-image` : sourceImage}
                 featurePoints={report?.feature_points || []}
               />
 
-              {sourceImage && (
+              {jobId && (
                 <div style={{ marginTop: '32px' }}>
                   <ImageComparison
-                    sourceImage={sourceImage}
+                    sourceImage={`${API_BASE}/report/${jobId}/source-image`}
                     warpedImage={warpedImage}
                     jobId={jobId}
                   />
