@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import logging
+import mmap
+import os
+import re
 from datetime import datetime
 from pathlib import Path
 from typing import Tuple
@@ -28,6 +31,14 @@ def _find_element_text(root, tag_path: str):
     return el.text
 
 
+def _find_any_text(root, paths):
+    for path in paths:
+        text = _find_element_text(root, path)
+        if text is not None:
+            return text
+    return None
+
+
 def _parse_float(text):
     if text is None:
         return None
@@ -35,6 +46,33 @@ def _parse_float(text):
         return float(text.strip())
     except (ValueError, TypeError):
         return None
+
+
+def _find_isda_text(root, local_name):
+    for el in root.iter():
+        tag = el.tag.split("}")[-1] if "}" in el.tag else el.tag
+        if tag == local_name:
+            return el.text
+    return None
+
+
+def _find_sun_metadata(root):
+    sun_azimuth = None
+    sun_elevation = None
+
+    sun_azimuth = _parse_float(_find_isda_text(root, "sun_azimuth"))
+    sun_elevation = _parse_float(_find_isda_text(root, "sun_elevation"))
+
+    if sun_azimuth is None:
+        sun_azimuth = _parse_float(_find_isda_text(root, "Solar_Azimuth"))
+    if sun_elevation is None:
+        sun_elevation = _parse_float(_find_isda_text(root, "Solar_Elevation"))
+    if sun_azimuth is None:
+        sun_azimuth = _parse_float(_find_isda_text(root, "Sub_Solar_Azimuth"))
+    if sun_elevation is None:
+        sun_elevation = _parse_float(_find_isda_text(root, "Sub_Solar_Elevation"))
+
+    return sun_azimuth, sun_elevation
 
 
 def read_pds4(xml_label_path: str) -> Tuple[np.ndarray, ImageMetadata]:
@@ -49,12 +87,34 @@ def read_pds4(xml_label_path: str) -> Tuple[np.ndarray, ImageMetadata]:
 
     product_id = _find_element_text(root, "Identification_Area/product_name")
     if not product_id:
-        product_id = xml_path.stem
+        logical_id = _find_element_text(root, "Identification_Area/logical_identifier")
+        if logical_id:
+            product_id = logical_id.split(":")[-1]
+        else:
+            product_id = xml_path.stem
 
-    instrument_name = _find_element_text(root, "Observation_Area/Mission_Area/Mission") or ""
+    instrument_name = ""
+    for inst_el in root.iter():
+        tag = inst_el.tag.split("}")[-1] if "}" in inst_el.tag else inst_el.tag
+        if tag == "name" and inst_el.text:
+            parent_tag = ""
+            for parent in root.iter():
+                for child in parent:
+                    if child is inst_el:
+                        ptag = parent.tag.split("}")[-1] if "}" in parent.tag else parent.tag
+                        parent_tag = ptag
+                        break
+            if parent_tag == "Observing_System_Component":
+                instrument_name = inst_el.text
+                break
+
     sensor = "TMC2"
     if "OHRC" in instrument_name.upper():
         sensor = "OHRC"
+    elif "TMC" in instrument_name.upper():
+        sensor = "TMC2"
+    elif "IIRS" in instrument_name.upper():
+        sensor = "IIRS"
 
     pixel_scale = None
     for path in [
@@ -65,27 +125,15 @@ def read_pds4(xml_label_path: str) -> Tuple[np.ndarray, ImageMetadata]:
         pixel_scale = _parse_float(_find_element_text(root, path))
         if pixel_scale is not None:
             break
+
+    sun_azimuth, sun_elevation = _find_sun_metadata(root)
+
+    pixel_resolution = _parse_float(_find_isda_text(root, "pixel_resolution"))
+    if pixel_scale is None and pixel_resolution is not None:
+        pixel_scale = pixel_resolution
+
     if pixel_scale is None:
         pixel_scale = 1.0
-
-    sun_azimuth = None
-    sun_elevation = None
-    for az_path in [
-        "Observation_Area/Geometry/sun_azimuth",
-        "Observation_Area/Geometry/Solar_Azimuth",
-        "Observation_Area/Geometry/Sub_Solar_Azimuth",
-    ]:
-        sun_azimuth = _parse_float(_find_element_text(root, az_path))
-        if sun_azimuth is not None:
-            break
-    for el_path in [
-        "Observation_Area/Geometry/sun_elevation",
-        "Observation_Area/Geometry/Solar_Elevation",
-        "Observation_Area/Geometry/Sub_Solar_Elevation",
-    ]:
-        sun_elevation = _parse_float(_find_element_text(root, el_path))
-        if sun_elevation is not None:
-            break
 
     acq_str = _find_element_text(root, "Observation_Area/Time_Coordinates/start_date_time")
     acq_time = None
@@ -95,20 +143,21 @@ def read_pds4(xml_label_path: str) -> Tuple[np.ndarray, ImageMetadata]:
         except (ValueError, TypeError):
             pass
 
+    lines_el, samples_el, data_type_str = _parse_array_shape(root)
+
     binary_path = _resolve_binary_path(xml_path)
-    img_data = _read_pds4_binary(root, binary_path)
+    img_data = _read_pds4_binary_mmap(binary_path, lines_el, samples_el, data_type_str)
 
     lines, samples = img_data.shape[:2] if img_data.size > 0 else (0, 0)
 
     bit_depth = 16
-    depth_str = _find_element_text(root, "File_Area_Observational/Array_2D_Image/Element_Array/data_type")
-    if depth_str and "16" in depth_str:
-        bit_depth = 16
-    elif depth_str and "8" in depth_str:
+    if data_type_str and "8" in data_type_str:
         bit_depth = 8
+    elif data_type_str and "32" in data_type_str:
+        bit_depth = 32
 
-    swath = _parse_float(_find_element_text(root, "Observation_Area/Geometry/swath_width"))
-    altitude = _parse_float(_find_element_text(root, "Observation_Area/Geometry/Spacecraft_Altitude"))
+    swath = _parse_float(_find_isda_text(root, "swath_width"))
+    altitude = _parse_float(_find_isda_text(root, "spacecraft_altitude"))
 
     meta = ImageMetadata(
         product_id=product_id,
@@ -127,6 +176,46 @@ def read_pds4(xml_label_path: str) -> Tuple[np.ndarray, ImageMetadata]:
     return img_data, meta
 
 
+def _parse_array_shape(root):
+    lines_el = None
+    samples_el = None
+    data_type_str = None
+
+    for array_el in root.iter():
+        tag = array_el.tag.split("}")[-1] if "}" in array_el.tag else array_el.tag
+        if tag == "Element_Array":
+            for child in array_el:
+                ctag = child.tag.split("}")[-1] if "}" in child.tag else child.tag
+                if ctag == "data_type":
+                    data_type_str = (child.text or "").strip()
+
+    for axis_array in root.iter():
+        tag = axis_array.tag.split("}")[-1] if "}" in axis_array.tag else axis_array.tag
+        if tag in ("Axis_Array", "Array_Dimension_Axis"):
+            axis_name = None
+            axis_count = None
+            for child in axis_array:
+                ctag = child.tag.split("}")[-1] if "}" in child.tag else child.tag
+                if ctag == "axis_name":
+                    axis_name = (child.text or "").strip().lower()
+                elif ctag in ("elements", "axis_length"):
+                    try:
+                        axis_count = int((child.text or "").strip())
+                    except (ValueError, TypeError):
+                        pass
+            if axis_name == "line" and axis_count is not None:
+                lines_el = axis_count
+            elif axis_name == "sample" and axis_count is not None:
+                samples_el = axis_count
+
+    if lines_el is None or samples_el is None:
+        logger.warning("Could not parse array shape from XML; defaulting to 64x64")
+        lines_el = lines_el or 64
+        samples_el = samples_el or 64
+
+    return lines_el, samples_el, data_type_str
+
+
 def _resolve_binary_path(xml_path: Path) -> Path:
     for ext in [".img", ".IMG", ".dat", ".DAT", ".bin"]:
         candidate = xml_path.with_suffix(ext)
@@ -140,40 +229,56 @@ def _resolve_binary_path(xml_path: Path) -> Path:
     return xml_path.with_suffix(".img")
 
 
-def _read_pds4_binary(root, binary_path: Path) -> np.ndarray:
+def _read_pds4_binary_mmap(binary_path: Path, lines: int, samples: int, data_type_str: str = None) -> np.ndarray:
     if not binary_path.exists():
         raise FileNotFoundError(f"PDS4 image body not found: {binary_path}")
 
-    lines_el = None
-    samples_el = None
-    for dim in root.iter():
-        local = dim.tag.split("}")[-1] if "}" in dim.tag else dim.tag
-        if local == "axis_name":
-            name = (dim.text or "").strip()
-            parent = None
-            for p in root.iter():
-                for child in p:
-                    clocal = child.tag.split("}")[-1] if "}" in child.tag else child.tag
-                    if clocal == "axis_name" and child is dim:
-                        parent = p
-                        break
-            if parent is not None:
-                for child in parent:
-                    clocal = child.tag.split("}")[-1] if "}" in child.tag else child.tag
-                    if clocal == "axis_length":
-                        if name.lower() == "line":
-                            lines_el = int(child.text)
-                        elif name.lower() == "sample":
-                            samples_el = int(child.text)
+    dtype = np.uint16
+    if data_type_str:
+        dt_lower = data_type_str.lower()
+        if "unsignedlsb1" in dt_lower or "uint8" in dt_lower:
+            dtype = np.uint8
+        elif "unsignedlsb2" in dt_lower or "uint16" in dt_lower:
+            dtype = np.uint16
+        elif "signedlsb4" in dt_lower or "int32" in dt_lower:
+            dtype = np.int32
+        elif "unsignedlsb4" in dt_lower or "uint32" in dt_lower:
+            dtype = np.uint32
+        elif "real" in dt_lower or "float" in dt_lower:
+            dtype = np.float32
 
-    if lines_el is None or samples_el is None:
-        lines_el = 64
-        samples_el = 64
+    item_size = np.dtype(dtype).itemsize
+    expected_bytes = lines * samples * item_size
+    file_size = binary_path.stat().st_size
+
+    if file_size < expected_bytes:
+        raise IOError(
+            f"PDS4 body truncated: expected {expected_bytes} bytes "
+            f"({lines}x{samples}x{item_size}), got {file_size}"
+        )
+
+    file_size_gb = file_size / (1024 ** 3)
+    logger.info(
+        "Loading PDS4 image: %dx%d %s (%.1f GB file)",
+        lines, samples, dtype, file_size_gb,
+    )
+
+    if file_size > 500 * 1024 * 1024:
+        logger.info("Large file detected; using memory mapping")
+        return _mmap_read(binary_path, lines, samples, dtype, expected_bytes)
 
     raw = binary_path.read_bytes()
-    expected = lines_el * samples_el * 2
-    if len(raw) < expected:
-        raise IOError(f"PDS4 body truncated: expected {expected}, got {len(raw)}")
+    arr = np.frombuffer(raw[:expected_bytes], dtype=dtype)
+    return arr.reshape(lines, samples)
 
-    arr = np.frombuffer(raw[:expected], dtype=np.uint16)
-    return arr.reshape(lines_el, samples_el)
+
+def _mmap_read(binary_path: Path, lines: int, samples: int, dtype, expected_bytes: int) -> np.ndarray:
+    with open(binary_path, "rb") as f:
+        mm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+        try:
+            raw = mm[:expected_bytes]
+        finally:
+            mm.close()
+
+    arr = np.frombuffer(raw, dtype=dtype)
+    return arr.reshape(lines, samples)

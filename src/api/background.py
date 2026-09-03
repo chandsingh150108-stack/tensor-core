@@ -17,9 +17,31 @@ logger = logging.getLogger(__name__)
 
 _jobs: dict[str, dict] = {}
 
+MAX_DIMENSION = 4000
+
 
 def get_job(job_id: str) -> Optional[dict]:
     return _jobs.get(job_id)
+
+
+def _crop_to_manageable(img: np.ndarray) -> np.ndarray:
+    h, w = img.shape[:2]
+    if h <= MAX_DIMENSION and w <= MAX_DIMENSION:
+        return img
+
+    crop_h = min(h, MAX_DIMENSION)
+    crop_w = min(w, MAX_DIMENSION)
+    y = (h - crop_h) // 2
+    x = (w - crop_w) // 2
+
+    logger.info(
+        "Cropping large image %dx%d to center %dx%d",
+        w, h, crop_w, crop_h,
+    )
+
+    if img.ndim == 2:
+        return img[y:y + crop_h, x:x + crop_w]
+    return img[y:y + crop_h, x:x + crop_w, :]
 
 
 def run_registration_job(
@@ -31,6 +53,9 @@ def run_registration_job(
 ) -> None:
     _jobs[job_id]["status"] = "running"
     try:
+        img_a = _crop_to_manageable(img_a)
+        img_b = _crop_to_manageable(img_b)
+
         pipeline = PreprocessingPipeline()
         processed_a = pipeline.run(img_a, meta_a)
         processed_b = pipeline.run(img_b, meta_b)
