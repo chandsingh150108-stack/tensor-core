@@ -12,13 +12,14 @@ const styles = {
     height: '140px',
     margin: '0 auto 28px',
     animation: 'float 5s ease-in-out infinite',
+    perspective: '600px',
   },
   moon: {
     width: '140px',
     height: '140px',
     borderRadius: '50%',
     background: 'linear-gradient(135deg, #2a2a3a 0%, #3a3a50 25%, #4a4a60 50%, #3a3a50 75%, #2a2a3a 100%)',
-    animation: 'moonSpin 30s linear infinite',
+    animation: 'moonSpin3D 8s ease-in-out infinite',
     boxShadow: `
       0 0 40px rgba(120, 130, 160, 0.15),
       0 0 80px rgba(80, 100, 140, 0.1),
