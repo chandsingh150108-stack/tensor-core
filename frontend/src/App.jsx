@@ -1,20 +1,37 @@
-import React, { useState } from 'react';
-import DualImageViewer from './components/DualImageViewer';
-import ReportPanel from './components/ReportPanel';
-import BlendSlider from './components/BlendSlider';
+import React, { useState, useCallback } from 'react';
+import './App.css';
+import Particles from './components/Particles';
+import HeroSection from './components/HeroSection';
+import StepIndicator from './components/StepIndicator';
+import ImageUploader from './components/ImageUploader';
+import ProcessingView from './components/ProcessingView';
+import ImageComparison from './components/ImageComparison';
+import ResultsDashboard from './components/ResultsDashboard';
 import { uploadImage, startRegistration, pollRegistration, getReport } from './api/client';
+
+function getStepFromStatus(status) {
+  if (status === 'idle') return 1;
+  if (status === 'submitting' || status === 'polling') return 2;
+  if (status === 'done' || status === 'failed' || status === 'timeout') return 3;
+  return 1;
+}
 
 function App() {
   const [sourceImage, setSourceImage] = useState(null);
   const [referenceImage, setReferenceImage] = useState(null);
   const [sourceId, setSourceId] = useState(null);
   const [referenceId, setReferenceId] = useState(null);
+  const [sourceMetadata, setSourceMetadata] = useState(null);
+  const [referenceMetadata, setReferenceMetadata] = useState(null);
   const [jobId, setJobId] = useState(null);
   const [status, setStatus] = useState('idle');
   const [report, setReport] = useState(null);
   const [error, setError] = useState(null);
+  const [warpedImage, setWarpedImage] = useState(null);
 
-  const handleUpload = async (file, type) => {
+  const currentStep = getStepFromStatus(status);
+
+  const handleUpload = useCallback(async (file, type) => {
     try {
       setError(null);
       const result = await uploadImage(file);
@@ -22,16 +39,30 @@ function App() {
       if (type === 'source') {
         setSourceImage(url);
         setSourceId(result.image_id);
+        setSourceMetadata(result.metadata);
       } else {
         setReferenceImage(url);
         setReferenceId(result.image_id);
+        setReferenceMetadata(result.metadata);
       }
     } catch (err) {
       setError(err.message);
     }
-  };
+  }, []);
 
-  const handleRegister = async () => {
+  const handleRemove = useCallback((type) => {
+    if (type === 'source') {
+      setSourceImage(null);
+      setSourceId(null);
+      setSourceMetadata(null);
+    } else {
+      setReferenceImage(null);
+      setReferenceId(null);
+      setReferenceMetadata(null);
+    }
+  }, []);
+
+  const handleRegister = useCallback(async () => {
     if (!sourceId || !referenceId) {
       setError('Please upload both images first');
       return;
@@ -47,7 +78,7 @@ function App() {
       setError(err.message);
       setStatus('idle');
     }
-  };
+  }, [sourceId, referenceId]);
 
   const pollUntilDone = async (jid) => {
     let attempts = 0;
@@ -59,12 +90,15 @@ function App() {
           setStatus(result.status);
           const reportResult = await getReport(jid);
           setReport(reportResult);
+          if (result.status === 'done') {
+            setWarpedImage(`/report/${jid}/overlay`);
+          }
           return;
         }
-        await new Promise(r => setTimeout(r, 2000));
+        await new Promise((r) => setTimeout(r, 2000));
         attempts++;
-      } catch (err) {
-        await new Promise(r => setTimeout(r, 2000));
+      } catch {
+        await new Promise((r) => setTimeout(r, 2000));
         attempts++;
       }
     }
@@ -72,50 +106,86 @@ function App() {
     setError('Registration timed out');
   };
 
-  return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h1>Lunar Image Registration</h1>
-      {error && <div style={{ color: 'red', margin: '10px 0' }}>{error}</div>}
+  const handleReset = () => {
+    setSourceImage(null);
+    setReferenceImage(null);
+    setSourceId(null);
+    setReferenceId(null);
+    setSourceMetadata(null);
+    setReferenceMetadata(null);
+    setJobId(null);
+    setStatus('idle');
+    setReport(null);
+    setError(null);
+    setWarpedImage(null);
+  };
 
-      <div style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
-        <div>
-          <h3>Source Image</h3>
-          <input
-            type="file"
-            accept=".tif,.tiff,.img,.xml,.lbl"
-            onChange={(e) => e.target.files[0] && handleUpload(e.target.files[0], 'source')}
-          />
-          {sourceImage && <img src={sourceImage} alt="Source" style={{ maxWidth: '300px', marginTop: '10px' }} />}
-        </div>
-        <div>
-          <h3>Reference Image</h3>
-          <input
-            type="file"
-            accept=".tif,.tiff,.img,.xml,.lbl"
-            onChange={(e) => e.target.files[0] && handleUpload(e.target.files[0], 'reference')}
-          />
-          {referenceImage && <img src={referenceImage} alt="Reference" style={{ maxWidth: '300px', marginTop: '10px' }} />}
+  return (
+    <>
+      <Particles />
+      <div className="app-container">
+        <div className="main-content">
+          <HeroSection />
+          <StepIndicator currentStep={currentStep} />
+
+          {status === 'idle' && (
+            <div style={{ animation: 'fadeInUp 0.6s ease-out 0.4s both' }}>
+              <ImageUploader
+                sourceImage={sourceImage}
+                referenceImage={referenceImage}
+                sourceMetadata={sourceMetadata}
+                referenceMetadata={referenceMetadata}
+                onUpload={handleUpload}
+                onRemove={handleRemove}
+              />
+
+              <div style={{ textAlign: 'center', marginTop: '32px' }}>
+                <button
+                  className="btn btn-primary"
+                  onClick={handleRegister}
+                  disabled={!sourceId || !referenceId}
+                  style={{ padding: '14px 40px', fontSize: '16px' }}
+                >
+                  ⚡ Start Registration
+                </button>
+              </div>
+            </div>
+          )}
+
+          {(status === 'submitting' || status === 'polling') && (
+            <ProcessingView status={status} />
+          )}
+
+          {(status === 'done' || status === 'failed' || status === 'timeout') && (
+            <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
+              <ResultsDashboard report={report} sourceImage={sourceImage} />
+
+              {sourceImage && (
+                <div style={{ marginTop: '32px' }}>
+                  <ImageComparison
+                    sourceImage={sourceImage}
+                    warpedImage={warpedImage}
+                    jobId={jobId}
+                  />
+                </div>
+              )}
+
+              <div style={{ textAlign: 'center', marginTop: '32px' }}>
+                <button className="btn btn-secondary" onClick={handleReset}>
+                  ↻ Register Another Pair
+                </button>
+              </div>
+            </div>
+          )}
+
+          {error && (
+            <div className="error-toast" onClick={() => setError(null)}>
+              ✗ {error}
+            </div>
+          )}
         </div>
       </div>
-
-      <button
-        onClick={handleRegister}
-        disabled={!sourceId || !referenceId || status === 'polling'}
-        style={{ padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}
-      >
-        {status === 'polling' ? 'Registering...' : 'Start Registration'}
-      </button>
-
-      {status === 'polling' && <p>Processing registration...</p>}
-
-      {report && (
-        <div style={{ marginTop: '20px' }}>
-          <h2>Results</h2>
-          <BlendSlider jobId={jobId} />
-          <ReportPanel report={report} />
-        </div>
-      )}
-    </div>
+    </>
   );
 }
 

@@ -9,10 +9,6 @@ sensors:
   OHRC:
     default_pixel_scale_m: 0.28
     description: "Chandrayaan-2 Orbiter High Resolution Camera"
-  LRO_NAC:
-    min_pixel_scale_m: 0.5
-    max_pixel_scale_m: 2.0
-    description: "Lunar Reconnaissance Orbiter Narrow Angle Camera"
 
 # Validation tolerances for pixel_scale_sanity_check()
 pixel_scale_sanity:

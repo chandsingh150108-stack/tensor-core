@@ -8,7 +8,7 @@ from pydantic import BaseModel
 
 class ImageMetadataModel(BaseModel):
     product_id: str
-    sensor: Literal["TMC2", "OHRC", "LRO_NAC"]
+    sensor: Literal["TMC2", "OHRC"]
     archive_standard: Literal["PDS3", "PDS4", "GEOTIFF"]
     pixel_scale_m: float
     swath_km: Optional[float] = None

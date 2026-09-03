@@ -1,14 +1,18 @@
 from __future__ import annotations
 
+import os
+from pathlib import Path
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from src.api.routes import register, report, upload
 
 app = FastAPI(
     title="Lunar Image Registration API",
-    description="Multi-Scale Lunar Image Registration Framework for ISRO Chandrayaan-2 & NASA LRO-NAC",
+    description="Multi-Scale Lunar Image Registration Framework for ISRO Chandrayaan-2",
     version="0.1.0",
 )
 
@@ -38,3 +42,8 @@ async def general_error_handler(request: Request, exc: Exception):
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+frontend_dir = Path(__file__).resolve().parent.parent.parent / "frontend" / "dist"
+if frontend_dir.exists():
+    app.mount("/", StaticFiles(directory=str(frontend_dir), html=True), name="static")

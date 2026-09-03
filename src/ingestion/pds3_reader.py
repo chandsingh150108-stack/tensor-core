@@ -81,10 +81,8 @@ def read_pds3(label_path: str) -> Tuple[np.ndarray, ImageMetadata]:
             pass
 
     sensor_raw = str(_get_value(flat, ["INSTRUMENT_ID", "MISSION_PHASE_NAME"], str) or "")
-    sensor = "LRO_NAC"
-    if "TMC2" in sensor_raw.upper():
-        sensor = "TMC2"
-    elif "OHRC" in sensor_raw.upper():
+    sensor = "TMC2"
+    if "OHRC" in sensor_raw.upper():
         sensor = "OHRC"
 
     body_path = _resolve_body_path(label_file)

@@ -49,7 +49,7 @@ def read_geotiff(path: str) -> Tuple[np.ndarray, ImageMetadata]:
 
     meta = ImageMetadata(
         product_id=tif_path.stem,
-        sensor="LRO_NAC",
+        sensor="TMC2",
         archive_standard="GEOTIFF",
         pixel_scale_m=float(pixel_scale),
         sun_azimuth_deg=sun_azimuth,

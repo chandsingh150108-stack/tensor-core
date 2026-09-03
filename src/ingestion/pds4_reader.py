@@ -55,8 +55,6 @@ def read_pds4(xml_label_path: str) -> Tuple[np.ndarray, ImageMetadata]:
     sensor = "TMC2"
     if "OHRC" in instrument_name.upper():
         sensor = "OHRC"
-    elif "LRO" in instrument_name.upper() or "NAC" in instrument_name.upper():
-        sensor = "LRO_NAC"
 
     pixel_scale = None
     for path in [

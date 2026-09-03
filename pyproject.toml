@@ -5,7 +5,7 @@ build-backend = "setuptools.backends._legacy:_Backend"
 [project]
 name = "lunar-registration"
 version = "0.1.0"
-description = "Multi-Scale Lunar Image Registration Framework for ISRO Chandrayaan-2 & NASA LRO-NAC"
+description = "Multi-Scale Lunar Image Registration Framework for ISRO Chandrayaan-2"
 requires-python = ">=3.10"
 dependencies = [
     "numpy>=1.24.0",

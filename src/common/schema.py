@@ -8,7 +8,7 @@ from typing import Literal, Optional, Tuple
 @dataclass(frozen=True)
 class ImageMetadata:
     product_id: str
-    sensor: Literal["TMC2", "OHRC", "LRO_NAC"]
+    sensor: Literal["TMC2", "OHRC"]
     archive_standard: Literal["PDS3", "PDS4", "GEOTIFF"]
     pixel_scale_m: float
     swath_km: Optional[float] = None

@@ -1,6 +1,6 @@
 # Lunar Image Registration Framework
 
-**Multi-Scale Lunar Image Registration for ISRO Chandrayaan-2 & NASA LRO-NAC**
+**Multi-Scale Lunar Image Registration for ISRO Chandrayaan-2**
 
 A complete pipeline for automatically aligning satellite and lunar images taken by different sensors, at different resolutions, under different lighting conditions. The system decides between classical computer vision (SIFT) and deep learning (LoFTR) matching based on image-pair difficulty.
 
@@ -30,7 +30,6 @@ This framework solves the problem of registering (aligning) pairs of lunar/satel
 |--------|---------|-------------|----------------|
 | TMC-2 | ISRO Chandrayaan-2 | ~5.0 m/pixel | PDS4 |
 | OHRC | ISRO Chandrayaan-2 | ~0.28 m/pixel | PDS4 |
-| LRO-NAC | NASA LRO | 0.5–2.0 m/pixel | PDS3 |
 
 ## Architecture
 
@@ -460,7 +459,7 @@ All configuration files are in the `configs/` directory. Each module reads its o
 
 | File | Controls | Key Settings |
 |------|----------|-------------|
-| `ingestion.yaml` | Sensor defaults, pixel scale validation | TMC2: 5.0m, OHRC: 0.28m, LRO_NAC: 0.5-2.0m |
+| `ingestion.yaml` | Sensor defaults, pixel scale validation | TMC2: 5.0m, OHRC: 0.28m |
 | `preprocessing.yaml` | 4-stage pipeline toggles and parameters | All stages enabled by default |
 | `pyramid.yaml` | Pyramid construction parameters | max_levels: 6, min_image_dim: 16 |
 | `features.yaml` | Detector presets (fast/thorough) | Default: SIFT fast (500 features) |
