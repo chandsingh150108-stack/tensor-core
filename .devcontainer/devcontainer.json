@@ -1,8 +1,5 @@
 {
   "name": "harness",
   "image": "mcr.microsoft.com/devcontainers/typescript-node:24",
-  "containerEnv": {
-    "AGENT_BROWSER_EXECUTABLE_PATH": "/usr/bin/chromium"
-  },
   "postCreateCommand": "bash .devcontainer/setup.sh"
 }
