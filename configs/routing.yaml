@@ -1,0 +1,13 @@
+# Routing engine configuration
+# NOTE: difficulty_threshold is a tunable default assumption, NOT an empirical constant.
+# It should be recalibrated against real labeled data when available.
+
+difficulty_threshold: 0.5  # Below this: classical path; above: deep path
+min_inlier_ratio: 0.3
+
+# Difficulty score weights (configurable, not empirically derived)
+difficulty:
+  weights:
+    texture_weight: 0.4
+    illumination_weight: 0.3
+    scale_weight: 0.3

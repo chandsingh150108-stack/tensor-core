@@ -1,0 +1,15 @@
+# Deep matching configuration
+
+device:
+  prefer_gpu: true
+
+superpoint:
+  confidence_threshold: 0.5
+
+loftr:
+  pretrained: outdoor
+  confidence_threshold: 0.5
+
+lightglue:
+  features: superpoint
+  confidence_threshold: 0.5

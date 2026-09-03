@@ -1,0 +1,9 @@
+# Classical matching configuration
+
+matcher:
+  default_method: flann
+  ratio_threshold: 0.75
+
+transform:
+  default_model: homography
+  ransac_threshold: 3.0

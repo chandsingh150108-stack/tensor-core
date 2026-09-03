@@ -1,0 +1,9 @@
+# Pyramid configuration
+
+max_levels: 6
+
+# Candidate scales for phase-correlation fallback
+phase_correlation_scales: [0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0]
+
+# Minimum image dimension before clamping pyramid levels
+min_image_dim: 16

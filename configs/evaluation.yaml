@@ -1,0 +1,10 @@
+# Evaluation configuration
+# NOTE: These weights are configurable, NOT empirically derived from labeled data.
+# The composite confidence score should not be presented as more rigorously calibrated than it is.
+
+confidence:
+  weights:
+    ssim_weight: 0.3
+    mi_weight: 0.2
+    inlier_ratio_weight: 0.3
+    corner_reproj_weight: 0.2

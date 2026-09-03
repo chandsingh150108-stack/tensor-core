@@ -1,0 +1,20 @@
+# Ingestion configuration
+# Pixel scale values below are fallback sanity-check defaults only.
+# Actual values always come from the parsed label first; these are validation cross-checks.
+
+sensors:
+  TMC2:
+    default_pixel_scale_m: 5.0
+    description: "Chandrayaan-2 Terrain Mapping Camera 2"
+  OHRC:
+    default_pixel_scale_m: 0.28
+    description: "Chandrayaan-2 Orbiter High Resolution Camera"
+  LRO_NAC:
+    min_pixel_scale_m: 0.5
+    max_pixel_scale_m: 2.0
+    description: "Lunar Reconnaissance Orbiter Narrow Angle Camera"
+
+# Validation tolerances for pixel_scale_sanity_check()
+pixel_scale_sanity:
+  min_valid_m: 0.01
+  max_valid_m: 1000.0

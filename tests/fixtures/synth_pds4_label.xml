@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pds:Product_Observational xmlns:pds="http://pds.nasa.gov/pds4/pds/v1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <pds:Identification_Area>
+    <pds:logical_identifier>urn:isro:psa:instrument:test_pds4</pds:logical_identifier>
+    <pds:version_id>1.0</pds:version_id>
+    <pds:product_name>TEST_PDS4_LABEL</pds:product_name>
+  </pds:Identification_Area>
+  <pds:Observation_Area>
+    <pds:Time_Coordinates>
+      <pds:start_date_time>2023-01-15T10:30:00Z</pds:start_date_time>
+    </pds:Time_Coordinates>
+    <pds:Geometry>
+      <pds:Solar_Elevation>35.0</pds:Solar_Elevation>
+      <pds:Solar_Azimuth>120.0</pds:Solar_Azimuth>
+    </pds:Geometry>
+    <pds:Primary_Result_Summary>
+      <pds:intent>Science</pds:intent>
+    </pds:Primary_Result_Summary>
+    <pds:Mission_Area>
+      <pds:Mission>ISRO Chandrayaan-2 OHRC</pds:Mission>
+    </pds:Mission_Area>
+  </pds:Observation_Area>
+  <pds:File_Area_Observational>
+    <pds:File>
+      <pds:file_name>synth_pds4_body.img</pds:file_name>
+    </pds:File>
+    <pds:Array_2D_Image>
+      <pds:local_identifier>image_data</pds:local_identifier>
+      <pds:offset>0</pds:offset>
+      <pds:axes>2</pds:axes>
+      <pds:axis_index_order>Line Sample</pds:axis_index_order>
+      <pds:scaling_factor>0.28</pds:scaling_factor>
+      <pds:Element_Array>
+        <pds:data_type>UnsignedInteger</pds:data_type>
+        <pds:unit>DN</pds:unit>
+      </pds:Element_Array>
+      <pds:Array_Dimension_Axis>
+        <pds:axis_length>64</pds:axis_length>
+        <pds:axis_name>Line</pds:axis_name>
+      </pds:Array_Dimension_Axis>
+      <pds:Array_Dimension_Axis>
+        <pds:axis_length>64</pds:axis_length>
+        <pds:axis_name>Sample</pds:axis_name>
+      </pds:Array_Dimension_Axis>
+    </pds:Array_2D_Image>
+  </pds:File_Area_Observational>
+</pds:Product_Observational>

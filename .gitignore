@@ -34,6 +34,18 @@ pnpm-debug.log*
 # Claude Code skill stub (regenerate with: npx skills add vercel-labs/agent-browser)
 .claude/
 
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+
+# Build
+.dist/
+
 # Editor / OS
 .DS_Store
 .idea/

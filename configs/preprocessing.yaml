@@ -1,0 +1,19 @@
+# Preprocessing pipeline configuration
+# Each stage can be individually toggled on/off.
+
+stages:
+  denoise:
+    enabled: true
+    method: nlm  # Options: nlm, bilateral, median
+
+  photometric:
+    enabled: true
+
+  shadow_normalize:
+    enabled: true
+    percentile: 5.0
+
+  clahe:
+    enabled: true
+    clip_limit: 2.0
+    tile_grid_size: [8, 8]

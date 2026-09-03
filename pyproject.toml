@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "lunar-registration"
+version = "0.1.0"
+description = "Multi-Scale Lunar Image Registration Framework for ISRO Chandrayaan-2 & NASA LRO-NAC"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24.0",
+    "opencv-python-headless>=4.8.0",
+    "scikit-image>=0.21.0",
+    "torch>=2.0.0",
+    "kornia>=0.7.0",
+    "rasterio>=1.3.0",
+    "pds4-tools>=1.3.0",
+    "pvl>=1.3.0",
+    "fastapi>=0.100.0",
+    "uvicorn[standard]>=0.23.0",
+    "pyyaml>=6.0",
+    "pydantic>=2.0.0",
+    "python-multipart>=0.0.6",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v"
