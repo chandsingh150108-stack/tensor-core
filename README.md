@@ -73,7 +73,7 @@ Docker handles all system dependencies (GDAL, Python, Node) automatically.
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone <https://github.com/chandsingh150108-stack/tensor-core2.git>
 cd crm
 
 # Start all services
