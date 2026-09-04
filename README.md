@@ -34,7 +34,7 @@ This framework solves the problem of registering (aligning) pairs of lunar/satel
 ## Architecture
 
 ```
-Frontend (React, port 3000)
+Frontend (React, port 8000)
     │
     ▼
 FastAPI Backend (port 8000)
