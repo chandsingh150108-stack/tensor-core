@@ -13,7 +13,7 @@ const styles = {
     borderRadius: 'var(--radius)',
     border: `2px dashed ${isDragging ? 'var(--accent)' : hasImage ? 'var(--success)' : 'var(--glass-border)'}`,
     background: isDragging
-      ? 'rgba(59, 130, 246, 0.08)'
+      ? 'rgba(18, 19, 88, 0.08)'
       : hasImage
       ? 'rgba(34, 197, 94, 0.04)'
       : 'var(--glass)',
@@ -50,8 +50,8 @@ const styles = {
   formatBadge: {
     padding: '3px 8px',
     borderRadius: '4px',
-    background: 'rgba(59, 130, 246, 0.1)',
-    border: '1px solid rgba(59, 130, 246, 0.2)',
+    background: 'rgba(18, 19, 88, 0.1)',
+    border: '1px solid rgba(18, 19, 88, 0.2)',
     fontSize: '10px',
     fontWeight: 600,
     color: 'var(--accent-light)',
@@ -98,8 +98,8 @@ const styles = {
   metaTag: {
     padding: '2px 8px',
     borderRadius: '4px',
-    background: 'rgba(139, 92, 246, 0.1)',
-    border: '1px solid rgba(139, 92, 246, 0.2)',
+    background: 'rgba(18, 19, 88, 0.1)',
+    border: '1px solid rgba(18, 19, 88, 0.2)',
     fontSize: '11px',
     color: 'var(--purple)',
   },

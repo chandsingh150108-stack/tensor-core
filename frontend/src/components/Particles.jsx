@@ -88,7 +88,7 @@ export default function Particles() {
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `rgba(59, 130, 246, ${opacity})`;
+            ctx.strokeStyle = `rgba(18, 19, 88, ${opacity})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }

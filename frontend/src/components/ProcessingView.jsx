@@ -43,11 +43,11 @@ const styles = {
     padding: '12px 16px',
     borderRadius: '12px',
     background: isActive
-      ? 'rgba(59, 130, 246, 0.1)'
+      ? 'rgba(18, 19, 88, 0.1)'
       : isCompleted
       ? 'rgba(34, 197, 94, 0.06)'
       : 'transparent',
-    border: `1px solid ${isActive ? 'rgba(59, 130, 246, 0.3)' : isCompleted ? 'rgba(34, 197, 94, 0.15)' : 'transparent'}`,
+    border: `1px solid ${isActive ? 'rgba(18, 19, 88, 0.3)' : isCompleted ? 'rgba(34, 197, 94, 0.15)' : 'transparent'}`,
     transition: 'all 0.4s ease',
   }),
   stepIcon: (isCompleted, isActive) => ({
@@ -89,7 +89,7 @@ const styles = {
     padding: '3px 8px',
     borderRadius: '4px',
     background: isActive
-      ? 'rgba(59, 130, 246, 0.2)'
+      ? 'rgba(18, 19, 88, 0.2)'
       : isCompleted
       ? 'rgba(34, 197, 94, 0.15)'
       : 'var(--glass)',

@@ -5,7 +5,7 @@ const styles = {
     marginBottom: '60px',
   },
   problemBanner: {
-    background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)',
+    background: 'linear-gradient(135deg, rgba(18, 19, 88, 0.1) 0%, rgba(18, 19, 88, 0.1) 100%)',
     border: '1px solid var(--glass-border)',
     borderRadius: '20px',
     padding: '48px 40px',
@@ -262,7 +262,7 @@ const styles = {
     height: '48px',
     margin: '0 auto 16px',
     borderRadius: '12px',
-    background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2))',
+    background: 'linear-gradient(135deg, rgba(18, 19, 88, 0.2), rgba(18, 19, 88, 0.2))',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -282,7 +282,7 @@ const styles = {
     lineHeight: 1.5,
   },
   quickStartContainer: {
-    background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%)',
+    background: 'linear-gradient(135deg, rgba(182, 187, 196, 0.1) 0%, rgba(18, 19, 88, 0.1) 100%)',
     border: '1px solid var(--glass-border)',
     borderRadius: '20px',
     padding: '48px 40px',
@@ -540,7 +540,7 @@ export default function InfoSection() {
             key={i}
             style={{
               ...styles.featureCard,
-              ...(hoveredFeature === i ? { transform: 'translateY(-4px)', boxShadow: '0 8px 32px rgba(59, 130, 246, 0.2)' } : {}),
+              ...(hoveredFeature === i ? { transform: 'translateY(-4px)', boxShadow: '0 8px 32px rgba(18, 19, 88, 0.2)' } : {}),
             }}
             onMouseEnter={() => setHoveredFeature(i)}
             onMouseLeave={() => setHoveredFeature(null)}

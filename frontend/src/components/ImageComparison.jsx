@@ -88,7 +88,7 @@ const styles = {
     borderRadius: '50%',
     background: 'white',
     border: '3px solid var(--accent)',
-    boxShadow: '0 0 20px rgba(59, 130, 246, 0.5)',
+    boxShadow: '0 0 20px rgba(18, 19, 88, 0.5)',
     cursor: 'ew-resize',
     zIndex: 11,
     display: 'flex',
