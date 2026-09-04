@@ -4,7 +4,7 @@
 
 confidence:
   weights:
-    ssim_weight: 0.3
-    mi_weight: 0.2
-    inlier_ratio_weight: 0.3
-    corner_reproj_weight: 0.2
+    ssim_weight: 0.1
+    mi_weight: 0.1
+    inlier_ratio_weight: 0.8
+    corner_reproj_weight: 0.0
