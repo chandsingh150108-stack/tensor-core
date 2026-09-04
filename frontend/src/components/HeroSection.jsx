@@ -1,63 +1,50 @@
 import React from 'react';
 
-const SIZE = 140;
-
 const styles = {
   container: {
     textAlign: 'center',
     padding: '60px 0 40px',
     animation: 'fadeInUp 0.8s ease-out',
   },
-  moonWrapper: {
-    position: 'relative',
-    width: `${SIZE}px`,
-    height: `${SIZE}px`,
+  moonIcon: {
+    width: '140px',
+    height: '140px',
     margin: '0 auto 28px',
-    animation: 'float 5s ease-in-out infinite',
-    perspective: '500px',
-  },
-  moonScene: {
-    width: '100%',
-    height: '100%',
-    transformStyle: 'preserve-3d',
-    animation: 'moonSpin3D 12s ease-in-out infinite',
-  },
-  face: {
-    position: 'absolute',
-    width: `${SIZE}px`,
-    height: `${SIZE}px`,
     borderRadius: '50%',
-    backfaceVisibility: 'hidden',
+    background: 'linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%)',
+    boxShadow: '0 0 60px rgba(59, 130, 246, 0.3), inset -12px -6px 24px rgba(0,0,0,0.4), inset 6px 3px 12px rgba(255,255,255,0.1)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    animation: 'float 4s ease-in-out infinite',
+    position: 'relative',
     overflow: 'hidden',
   },
-  frontFace: {
-    background: 'linear-gradient(135deg, #2a2a3a 0%, #3a3a50 25%, #4a4a60 50%, #3a3a50 75%, #2a2a3a 100%)',
+  crescentShadow: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    width: '50%',
+    height: '100%',
+    borderRadius: '0 70px 70px 0',
+    background: 'linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.6) 100%)',
+    pointerEvents: 'none',
   },
-  backFace: {
-    background: 'linear-gradient(215deg, #2a2a3a 0%, #3a3a50 25%, #4a4a60 50%, #3a3a50 75%, #2a2a3a 100%)',
-    transform: 'rotateY(180deg)',
-  },
-  sphereShading: {
+  surface: {
     position: 'absolute',
     top: 0,
     left: 0,
     width: '100%',
     height: '100%',
     borderRadius: '50%',
-    background: 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.08) 0%, transparent 50%, rgba(0,0,0,0.4) 80%, rgba(0,0,0,0.6) 100%)',
+    background: `
+      radial-gradient(circle at 25% 35%, rgba(60,55,70,0.6) 0%, transparent 15%),
+      radial-gradient(circle at 65% 25%, rgba(50,45,60,0.5) 0%, transparent 10%),
+      radial-gradient(circle at 45% 65%, rgba(55,50,65,0.4) 0%, transparent 12%),
+      radial-gradient(circle at 75% 60%, rgba(45,40,55,0.5) 0%, transparent 8%),
+      radial-gradient(circle at 30% 75%, rgba(50,45,60,0.4) 0%, transparent 9%)
+    `,
     pointerEvents: 'none',
-    zIndex: 10,
-  },
-  atmosphere: {
-    position: 'absolute',
-    top: '-3px',
-    left: '-3px',
-    width: `${SIZE + 6}px`,
-    height: `${SIZE + 6}px`,
-    borderRadius: '50%',
-    background: 'radial-gradient(circle, rgba(120,140,180,0.08) 60%, transparent 70%)',
-    pointerEvents: 'none',
-    zIndex: 0,
   },
   crater: {
     position: 'absolute',
@@ -84,6 +71,18 @@ const styles = {
     justifyContent: 'center',
     flexWrap: 'wrap',
   },
+  badge: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '6px',
+    padding: '6px 14px',
+    borderRadius: '20px',
+    background: 'var(--glass)',
+    border: '1px solid var(--glass-border)',
+    fontSize: '12px',
+    fontWeight: 500,
+    color: 'var(--text-secondary)',
+  },
   dot: {
     width: '6px',
     height: '6px',
@@ -91,67 +90,41 @@ const styles = {
   },
 };
 
-const frontCraters = [
-  { top: '18%', left: '22%', w: 20, h: 20, bg: 'rgba(80,75,90,0.3)', shadow: 'inset 2px 1px 4px rgba(0,0,0,0.3), inset -1px -1px 2px rgba(255,255,255,0.05)' },
-  { top: '50%', left: '55%', w: 16, h: 16, bg: 'rgba(75,70,85,0.25)', shadow: 'inset 1px 1px 3px rgba(0,0,0,0.25)' },
-  { top: '30%', left: '62%', w: 24, h: 24, bg: 'rgba(85,80,95,0.3)', shadow: 'inset 2px 2px 5px rgba(0,0,0,0.3), inset -1px -1px 3px rgba(255,255,255,0.06)' },
-  { top: '68%', left: '25%', w: 12, h: 12, bg: 'rgba(70,65,80,0.2)', shadow: 'inset 1px 1px 3px rgba(0,0,0,0.25)' },
-  { top: '12%', left: '50%', w: 10, h: 10, bg: 'rgba(65,60,75,0.2)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.2)' },
-  { top: '42%', left: '12%', w: 8, h: 8, bg: 'rgba(60,55,70,0.18)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.2)' },
-  { top: '78%', left: '58%', w: 6, h: 6, bg: 'rgba(55,50,65,0.15)', shadow: 'inset 1px 1px 1px rgba(0,0,0,0.2)' },
-  { top: '22%', left: '38%', w: 5, h: 5, bg: 'rgba(55,50,65,0.12)', shadow: 'none' },
-  { top: '58%', left: '35%', w: 7, h: 7, bg: 'rgba(50,45,60,0.15)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.2)' },
-  { top: '38%', left: '78%', w: 8, h: 8, bg: 'rgba(60,55,70,0.18)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.2)' },
+const craters = [
+  { top: '18%', left: '22%', w: 22, h: 22, inner: 'rgba(80,75,90,0.3)', shadow: 'inset 2px 1px 4px rgba(0,0,0,0.3), inset -1px -1px 2px rgba(255,255,255,0.05)' },
+  { top: '55%', left: '58%', w: 18, h: 18, inner: 'rgba(75,70,85,0.25)', shadow: 'inset 1px 1px 3px rgba(0,0,0,0.25), inset -1px -1px 2px rgba(255,255,255,0.04)' },
+  { top: '35%', left: '65%', w: 26, h: 26, inner: 'rgba(85,80,95,0.3)', shadow: 'inset 2px 2px 5px rgba(0,0,0,0.3), inset -1px -1px 3px rgba(255,255,255,0.06)' },
+  { top: '70%', left: '25%', w: 14, h: 14, inner: 'rgba(70,65,80,0.2)', shadow: 'inset 1px 1px 3px rgba(0,0,0,0.25)' },
+  { top: '15%', left: '55%', w: 12, h: 12, inner: 'rgba(65,60,75,0.2)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.2)' },
+  { top: '45%', left: '15%', w: 10, h: 10, inner: 'rgba(60,55,70,0.18)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.2)' },
+  { top: '80%', left: '60%', w: 6, h: 6, inner: 'rgba(55,50,65,0.15)', shadow: 'inset 1px 1px 1px rgba(0,0,0,0.2)' },
+  { top: '25%', left: '42%', w: 5, h: 5, inner: 'rgba(55,50,65,0.12)', shadow: 'inset 0.5px 0.5px 1px rgba(0,0,0,0.15)' },
+  { top: '60%', left: '38%', w: 7, h: 7, inner: 'rgba(50,45,60,0.15)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.2)' },
+  { top: '40%', left: '80%', w: 8, h: 8, inner: 'rgba(60,55,70,0.18)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.2)' },
+  { top: '85%', left: '40%', w: 4, h: 4, inner: 'rgba(50,45,60,0.1)', shadow: 'none' },
+  { top: '10%', left: '35%', w: 3, h: 3, inner: 'rgba(50,45,60,0.1)', shadow: 'none' },
 ];
-
-const backCraters = [
-  { top: '20%', left: '60%', w: 18, h: 18, bg: 'rgba(80,75,90,0.3)', shadow: 'inset 2px 1px 4px rgba(0,0,0,0.3)' },
-  { top: '55%', left: '30%', w: 22, h: 22, bg: 'rgba(75,70,85,0.25)', shadow: 'inset 2px 2px 4px rgba(0,0,0,0.25)' },
-  { top: '35%', left: '20%', w: 14, h: 14, bg: 'rgba(85,80,95,0.3)', shadow: 'inset 1px 1px 3px rgba(0,0,0,0.3)' },
-  { top: '70%', left: '55%', w: 10, h: 10, bg: 'rgba(70,65,80,0.2)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.2)' },
-  { top: '15%', left: '40%', w: 8, h: 8, bg: 'rgba(65,60,75,0.2)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.2)' },
-  { top: '45%', left: '70%', w: 12, h: 12, bg: 'rgba(60,55,70,0.18)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.2)' },
-  { top: '80%', left: '35%', w: 6, h: 6, bg: 'rgba(55,50,65,0.15)', shadow: 'inset 1px 1px 1px rgba(0,0,0,0.2)' },
-  { top: '25%', left: '75%', w: 5, h: 5, bg: 'rgba(50,45,60,0.12)', shadow: 'none' },
-  { top: '65%', left: '15%', w: 7, h: 7, bg: 'rgba(50,45,60,0.15)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.2)' },
-  { top: '40%', left: '45%', w: 9, h: 9, bg: 'rgba(55,50,65,0.18)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.2)' },
-];
-
-function MoonFace({ craters }) {
-  return (
-    <>
-      {craters.map((c, i) => (
-        <div
-          key={i}
-          style={{
-            ...styles.crater,
-            top: c.top,
-            left: c.left,
-            width: `${c.w}px`,
-            height: `${c.h}px`,
-            background: c.bg,
-            boxShadow: c.shadow,
-          }}
-        />
-      ))}
-    </>
-  );
-}
 
 export default function HeroSection() {
   return (
     <div style={styles.container}>
-      <div style={styles.moonWrapper}>
-        <div style={styles.atmosphere} />
-        <div style={styles.moonScene}>
-          <div style={{ ...styles.face, ...styles.frontFace }}>
-            <MoonFace craters={frontCraters} />
-          </div>
-          <div style={{ ...styles.face, ...styles.backFace }}>
-            <MoonFace craters={backCraters} />
-          </div>
-        </div>
-        <div style={styles.sphereShading} />
+      <div style={styles.moonIcon}>
+        <div style={styles.surface} />
+        {craters.map((c, i) => (
+          <div
+            key={i}
+            style={{
+              ...styles.crater,
+              top: c.top,
+              left: c.left,
+              width: `${c.w}px`,
+              height: `${c.h}px`,
+              background: c.inner,
+              boxShadow: c.shadow,
+            }}
+          />
+        ))}
+        <div style={styles.crescentShadow} />
       </div>
 
       <h1 style={styles.title}>
