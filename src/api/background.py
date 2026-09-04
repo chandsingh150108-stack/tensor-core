@@ -115,8 +115,12 @@ def run_registration_job(
             warped = warp_source(
                 processed_b, result.transform, "homography", processed_a.shape[:2]
             )
-            metrics["ssim"] = compute_ssim(processed_a, warped)
-            metrics["mutual_information"] = compute_mutual_information(processed_a, warped)
+
+            orig_warped = warp_source(
+                img_b, result.transform, "homography", img_a.shape[:2]
+            )
+            metrics["ssim"] = compute_ssim(img_a, orig_warped)
+            metrics["mutual_information"] = compute_mutual_information(img_a, orig_warped)
             metrics["inlier_ratio"] = result.inlier_ratio
             metrics["corner_reprojection_error"] = None
 
