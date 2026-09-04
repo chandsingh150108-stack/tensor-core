@@ -11,8 +11,8 @@ const styles = {
     height: '140px',
     margin: '0 auto 28px',
     borderRadius: '50%',
-    background: 'linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%)',
-    boxShadow: '0 0 60px rgba(59, 130, 246, 0.3), inset -12px -6px 24px rgba(0,0,0,0.4), inset 6px 3px 12px rgba(255,255,255,0.1)',
+    background: 'linear-gradient(135deg, #3a3a50 0%, #505068 50%, #6a6a82 100%)',
+    boxShadow: '0 0 60px rgba(100, 140, 220, 0.4), inset -12px -6px 24px rgba(0,0,0,0.3), inset 6px 3px 12px rgba(255,255,255,0.15)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -27,7 +27,7 @@ const styles = {
     width: '50%',
     height: '100%',
     borderRadius: '0 70px 70px 0',
-    background: 'linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.6) 100%)',
+    background: 'linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.25) 60%, rgba(0,0,0,0.5) 100%)',
     pointerEvents: 'none',
   },
   surface: {
@@ -38,11 +38,11 @@ const styles = {
     height: '100%',
     borderRadius: '50%',
     background: `
-      radial-gradient(circle at 25% 35%, rgba(60,55,70,0.6) 0%, transparent 15%),
-      radial-gradient(circle at 65% 25%, rgba(50,45,60,0.5) 0%, transparent 10%),
-      radial-gradient(circle at 45% 65%, rgba(55,50,65,0.4) 0%, transparent 12%),
-      radial-gradient(circle at 75% 60%, rgba(45,40,55,0.5) 0%, transparent 8%),
-      radial-gradient(circle at 30% 75%, rgba(50,45,60,0.4) 0%, transparent 9%)
+      radial-gradient(circle at 25% 35%, rgba(90,85,100,0.5) 0%, transparent 15%),
+      radial-gradient(circle at 65% 25%, rgba(80,75,90,0.4) 0%, transparent 10%),
+      radial-gradient(circle at 45% 65%, rgba(85,80,95,0.35) 0%, transparent 12%),
+      radial-gradient(circle at 75% 60%, rgba(75,70,85,0.4) 0%, transparent 8%),
+      radial-gradient(circle at 30% 75%, rgba(80,75,90,0.35) 0%, transparent 9%)
     `,
     pointerEvents: 'none',
   },
@@ -91,18 +91,18 @@ const styles = {
 };
 
 const craters = [
-  { top: '18%', left: '22%', w: 22, h: 22, inner: 'rgba(80,75,90,0.3)', shadow: 'inset 2px 1px 4px rgba(0,0,0,0.3), inset -1px -1px 2px rgba(255,255,255,0.05)' },
-  { top: '55%', left: '58%', w: 18, h: 18, inner: 'rgba(75,70,85,0.25)', shadow: 'inset 1px 1px 3px rgba(0,0,0,0.25), inset -1px -1px 2px rgba(255,255,255,0.04)' },
-  { top: '35%', left: '65%', w: 26, h: 26, inner: 'rgba(85,80,95,0.3)', shadow: 'inset 2px 2px 5px rgba(0,0,0,0.3), inset -1px -1px 3px rgba(255,255,255,0.06)' },
-  { top: '70%', left: '25%', w: 14, h: 14, inner: 'rgba(70,65,80,0.2)', shadow: 'inset 1px 1px 3px rgba(0,0,0,0.25)' },
-  { top: '15%', left: '55%', w: 12, h: 12, inner: 'rgba(65,60,75,0.2)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.2)' },
-  { top: '45%', left: '15%', w: 10, h: 10, inner: 'rgba(60,55,70,0.18)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.2)' },
-  { top: '80%', left: '60%', w: 6, h: 6, inner: 'rgba(55,50,65,0.15)', shadow: 'inset 1px 1px 1px rgba(0,0,0,0.2)' },
-  { top: '25%', left: '42%', w: 5, h: 5, inner: 'rgba(55,50,65,0.12)', shadow: 'inset 0.5px 0.5px 1px rgba(0,0,0,0.15)' },
-  { top: '60%', left: '38%', w: 7, h: 7, inner: 'rgba(50,45,60,0.15)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.2)' },
-  { top: '40%', left: '80%', w: 8, h: 8, inner: 'rgba(60,55,70,0.18)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.2)' },
-  { top: '85%', left: '40%', w: 4, h: 4, inner: 'rgba(50,45,60,0.1)', shadow: 'none' },
-  { top: '10%', left: '35%', w: 3, h: 3, inner: 'rgba(50,45,60,0.1)', shadow: 'none' },
+  { top: '18%', left: '22%', w: 22, h: 22, inner: 'rgba(100,95,110,0.3)', shadow: 'inset 2px 1px 4px rgba(0,0,0,0.25), inset -1px -1px 2px rgba(255,255,255,0.08)' },
+  { top: '55%', left: '58%', w: 18, h: 18, inner: 'rgba(95,90,105,0.25)', shadow: 'inset 1px 1px 3px rgba(0,0,0,0.2), inset -1px -1px 2px rgba(255,255,255,0.06)' },
+  { top: '35%', left: '65%', w: 26, h: 26, inner: 'rgba(105,100,115,0.3)', shadow: 'inset 2px 2px 5px rgba(0,0,0,0.25), inset -1px -1px 3px rgba(255,255,255,0.08)' },
+  { top: '70%', left: '25%', w: 14, h: 14, inner: 'rgba(90,85,100,0.2)', shadow: 'inset 1px 1px 3px rgba(0,0,0,0.2)' },
+  { top: '15%', left: '55%', w: 12, h: 12, inner: 'rgba(85,80,95,0.2)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.18)' },
+  { top: '45%', left: '15%', w: 10, h: 10, inner: 'rgba(80,75,90,0.18)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.18)' },
+  { top: '80%', left: '60%', w: 6, h: 6, inner: 'rgba(75,70,85,0.15)', shadow: 'inset 1px 1px 1px rgba(0,0,0,0.18)' },
+  { top: '25%', left: '42%', w: 5, h: 5, inner: 'rgba(75,70,85,0.12)', shadow: 'inset 0.5px 0.5px 1px rgba(0,0,0,0.12)' },
+  { top: '60%', left: '38%', w: 7, h: 7, inner: 'rgba(70,65,80,0.15)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.18)' },
+  { top: '40%', left: '80%', w: 8, h: 8, inner: 'rgba(80,75,90,0.18)', shadow: 'inset 1px 1px 2px rgba(0,0,0,0.18)' },
+  { top: '85%', left: '40%', w: 4, h: 4, inner: 'rgba(70,65,80,0.1)', shadow: 'none' },
+  { top: '10%', left: '35%', w: 3, h: 3, inner: 'rgba(70,65,80,0.1)', shadow: 'none' },
 ];
 
 export default function HeroSection() {
